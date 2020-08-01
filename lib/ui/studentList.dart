@@ -22,53 +22,60 @@ class _StudentListState extends State<StudentList> {
         future: StudentDBProvider.db.getAllStudentsFromLocalDb(),
         builder: (BuildContext context, AsyncSnapshot<List<Student>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                Student st = snapshot.data[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 6,
-                    child: ListTile(
-                        title: Text(st.name.toString()),
-                        leading: Icon(Icons.school,
-                            size: 30, color: AppConstants.primaryCol),
-                        trailing: Container(
-                          width: MediaQuery.of(context).size.width / 3.6,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.edit,
-                                      color: AppConstants.primaryCol),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                StudentForm(
-                                                  isEdit: true,
-                                                  student: st,
-                                                )));
-                                  }),
-                              IconButton(
-                                  icon: Icon(Icons.delete,
-                                      color: AppConstants.primaryCol),
-                                  onPressed: () {
-                                    StudentDBProvider.db
-                                        .deleteStudentFromLocalDb(st.id)
-                                        .then((value) {
-                                      setState(() {});
-                                    });
-                                  }),
-                            ],
-                          ),
-                        )),
-                  ),
-                );
-              },
-            );
+            if (snapshot.data.isNotEmpty) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Student st = snapshot.data[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 6,
+                      child: ListTile(
+                          title: Text(st.name.toString()),
+                          leading: Icon(Icons.school,
+                              size: 30, color: AppConstants.primaryCol),
+                          trailing: Container(
+                            width: MediaQuery.of(context).size.width / 3.6,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                    icon: Icon(Icons.edit,
+                                        color: AppConstants.primaryCol),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  StudentForm(
+                                                    isEdit: true,
+                                                    student: st,
+                                                  )));
+                                    }),
+                                IconButton(
+                                    icon: Icon(Icons.delete,
+                                        color: AppConstants.primaryCol),
+                                    onPressed: () {
+                                      StudentDBProvider.db
+                                          .deleteStudentFromLocalDb(st.id)
+                                          .then((value) {
+                                        setState(() {});
+                                      });
+                                    }),
+                              ],
+                            ),
+                          )),
+                    ),
+                  );
+                },
+              );
+            } else
+              return Center(
+                child: Container(
+                  child: Text('NO STUDENTS ADDED'),
+                ),
+              );
           } else if (snapshot.connectionState == ConnectionState.done &&
               !snapshot.hasData) {
             return Center(
