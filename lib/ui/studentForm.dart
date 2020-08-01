@@ -7,7 +7,7 @@ import 'package:studen_db/utilities/dbService.dart';
 import 'package:studen_db/models/student.dart';
 
 class StudentForm extends StatefulWidget {
-  final bool isEdit;
+  bool isEdit;
   final Student student;
 
   StudentForm({this.student, this.isEdit = false});
@@ -139,7 +139,6 @@ class _StudentFormState extends State<StudentForm> {
                                 onPressed: widget.isEdit
                                     ? () {
                                         Map updateMap = new Map();
-
                                         if (nameController.text.isNotEmpty)
                                           updateMap['name'] =
                                               nameController.text;
@@ -165,6 +164,10 @@ class _StudentFormState extends State<StudentForm> {
                                             .updateStudent(Map.from(updateMap),
                                                 widget.student.id)
                                             .then((value) {
+                                          setState(() {
+                                            widget.isEdit = false;
+                                          });
+
                                           navigate();
                                         });
                                       }
