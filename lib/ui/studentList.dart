@@ -4,6 +4,7 @@ import 'package:studen_db/utilities/dbService.dart';
 import 'package:studen_db/models/student.dart';
 import 'package:studen_db/utilities/appConstants.dart';
 import 'package:studen_db/ui/studentForm.dart';
+import 'emptyPage.dart';
 
 class StudentList extends StatefulWidget {
   @override
@@ -71,18 +72,7 @@ class _StudentListState extends State<StudentList> {
                 },
               );
             } else
-              return Center(
-                child: Container(
-                  child: Text('NO STUDENTS ADDED'),
-                ),
-              );
-          } else if (snapshot.connectionState == ConnectionState.done &&
-              !snapshot.hasData) {
-            return Center(
-              child: Container(
-                child: Text('NO STUDENTS ADDED'),
-              ),
-            );
+              return EmptyPage();
           } else {
             return Center(child: CircularProgressIndicator());
           }
